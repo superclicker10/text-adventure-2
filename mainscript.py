@@ -1,3 +1,4 @@
+from cellcreation import *
 from move import *
 import time as t
 x = 0
@@ -18,6 +19,9 @@ def delay():
         print("Delay set to maximum value (2).")
         n = 2
 
+def generate_map():
+    map_creation()
+
 def move():
     global x
     global y
@@ -26,18 +30,22 @@ def move():
         temp_x = x
         temp_y = y
         try:
-            x = eval(f'grid.{direction}(grid.oob, temp_x, temp_y, n)')[0]
+            x = eval(f'grid.{direction}(grid.oob_walls, temp_x, temp_y, n)')[0]     #update parameters should functions change
         except:
             return x, y
-        if f'grid.{direction}(grid.oob, temp_x, temp_y, n)' == False:
+        if f'grid.{direction}(grid.oob_walls, temp_x, temp_y, n)' == False:
             return x, y
-        y = eval(f'grid.{direction}(grid.oob, temp_x, temp_y, n)')[1]
+        y = eval(f'grid.{direction}(grid.oob_walls, temp_x, temp_y, n)')[1]
     except AttributeError:
         print("You have entered an invalid movement direction.")
     return x, y
 
 def repeated_action():
     print(f'You are currently at ({x}, {y}).')
+    """
+    if cells[f'({x}, {y})'] == "loot":          # checking for loot cells
+        print("You landed on a loot cell!")
+    """
     choice = input("What would you like to do? (move, interact, use, exit): ")
     if choice == "exit":
         print("Thanks for playing!")
@@ -48,9 +56,11 @@ def repeated_action():
     except:
         print("You can't do that.")
 
-delay()
-while True:
-    repeated_action()
+if __name__ == "__main__":
+    delay()
+    generate_map()
+    while True:
+        repeated_action()
 
 
 

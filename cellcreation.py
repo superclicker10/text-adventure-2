@@ -1,4 +1,4 @@
-from oobcreation import oob_creation
+from oobcreation import *
 import random as r
 import math as m
 import time as t
@@ -6,7 +6,7 @@ class Cell:
     
     temp = 20
     loot_max = 1
-    loot_chance = 35
+    loot_chance = 10
     id = "normal"
 
 class Loot(Cell):
@@ -22,7 +22,7 @@ class OOB(Cell):
     
 cells = {}
 def map_creation():
-    oob_list = oob_creation()
+    oob_list = oob_creation_walls()     #adjust for all functions in oobcreation.py
     counter = 10201   # adjust for the amount of squares in the grid
     for x_co in range(-50, 51):         # adjust for (negative half of grid length, positive half of grid length+1) and these exclude 0 when talking about halves (the grid becomes 80x80)
         for y_co in range(50, -51, -1):         # adjust for same as above but opposite
@@ -85,6 +85,6 @@ t.sleep(1000)
 """
 #cells = map_creation()
 #convert_coords(cells)
-map_creation()
-print_coords()
-print("done")
+#map_creation()
+#print_coords()
+#print("done")

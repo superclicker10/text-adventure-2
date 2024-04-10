@@ -1,11 +1,11 @@
 import time as t
-from oobcreation import oob_creation
+from oobcreation import *
 class Grid:
-    oob = oob_creation()
+    oob_walls = oob_creation_walls()          #adjust for all functions in oob_creation.py
 
-    def right(self, oob, x, y, n):
-        if (x+1, y) in oob:
-            print("You can't move that way.")
+    def right(self, oob_walls, x, y, n):
+        if f'({x+1}, {y})' in oob_walls:
+            print("You can't go any further.")
             t.sleep(n)
             return False
         else:
@@ -13,9 +13,9 @@ class Grid:
         t.sleep(n/2)
         return x, y
     
-    def left(self, oob, x, y, n):
-        if (x-1, y) in oob:
-            print("You can't move that way.")
+    def left(self, oob_walls, x, y, n):
+        if f'({x-1}, {y})' in oob_walls:
+            print("You can't go any further.")
             t.sleep(n)
             return False
         else:
@@ -23,9 +23,9 @@ class Grid:
         t.sleep(n/2)
         return x, y
 
-    def up(self, oob, x, y, n):
-        if (x, y+1) in oob:
-            print("You can't move that way.")
+    def up(self, oob_walls, x, y, n):
+        if f'({x}, {y+1})' in oob_walls:
+            print("You can't go any further.")
             t.sleep(n)
             return False
         else:
@@ -33,9 +33,9 @@ class Grid:
         t.sleep(n/2)
         return x, y
     
-    def down(self, oob, x, y, n):
-        if (x, y-1) in oob:
-            print("You can't move that way.")
+    def down(self, oob_walls, x, y, n):
+        if f'({x}, {y-1})' in oob_walls:
+            print("You can't go any further.")
             t.sleep(n)
             return False
         else:
