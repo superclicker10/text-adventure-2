@@ -39,7 +39,7 @@ def move():
         if f'grid.{direction}(grid.oob_walls, temp_x, temp_y, n)' == False:
             return x, y
         y = eval(f'grid.{direction}(grid.oob_walls, temp_x, temp_y, n)')[1]
-    except AttributeError:
+    except Exception:
         print("You have entered an invalid movement direction.")
     return x, y
 
@@ -51,7 +51,12 @@ def inventory():
         print_inventory()
     elif choice == "drop":
         item = rarity = None
-        drop_item(item, rarity, n)
+        try:
+            amount = int(input("Enter the amount to drop: "))
+            drop_item(item, rarity, amount, n)
+        except Exception or amount <= 0:
+            print("You have not entered a valid amount.")
+            t.sleep(n)
 
 def repeated_action():
     print(f'You are currently at ({x}, {y}).')
