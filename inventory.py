@@ -10,7 +10,7 @@ rarity_names = ["minimum",
     "epic",
     "legendary",
     "perfect"]
-loot = ["health potion", "mana potion", "gold", "book", "trash"]
+loot = ["health potion", "mana potion", "gold", "book", "scrap"]
 
 class Inventory:
     inventory = {}
@@ -66,7 +66,7 @@ def add_item(item, rarity, amount, n):
                 t.sleep(n)
 
 def drop_item(item, rarity, amount, n):
-    item = input("Enter type of item (health potion, mana potion, gold): ").lower().strip()       # update for future items
+    item = input("Enter type of item (health potion, mana potion, gold, book, scrap): ").lower().strip()       # update for future items
     if item in no_rarity:
         if f'{item}' not in Inventory.inventory.keys():
             print("That item is not in your inventory.")

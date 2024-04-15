@@ -131,7 +131,7 @@ def loot_cell_intro(x, y, n):
             chance = r.randint(1, 100)
             lootchance = item.loot_chance
             amount = item.amount
-            print(chance)
+            #print(chance)
             #print(item.__name__, str(lootchance), chance)
             #if r.randint(1, 100) <= item.__name__.loot_chance:
             if chance <= lootchance:

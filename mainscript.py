@@ -6,8 +6,34 @@ import time as t
 x = 0
 y = 0
 n = 1
+choice = None
 grid = Grid()
 inventory = Inventory()
+
+class Player:       #making health and mana exist, as well as their stats.                          
+    health = 100    #default 100
+    max_health = 100    #default 100
+    health_regen = 2    #default 2
+    mana = 100   #default 100
+    max_mana = 100  #default 100
+    mana_regen = 0.2    #default 0.2
+
+stats_list = [Player.health,
+    Player.max_health,
+    Player.health_regen,
+    Player.mana,
+    Player.max_mana,
+    Player.mana_regen]
+
+stats_list_name = ["health",
+    "max health",
+    "health regeneration",
+    "mana",
+    "max mana",
+    "mana regeneration"
+]
+    
+    
 def delay():
     global n
     try:
@@ -24,6 +50,26 @@ def delay():
 
 def generate_map():
     map_creation()
+
+def hp_and_mana_update():
+    if Player.health >= Player.max_health:
+        pass
+    else:
+        Player.health = round(Player.health + 2, 2)
+    if Player.mana >= Player.max_mana:
+        pass
+    else:
+        Player.mana = round(Player.mana + 0.2, 2)
+
+def stats():
+    print("Your stats are: ", end="")
+    print("\n")
+    t.sleep(n)
+    print(f'position: ({x}, {y})')
+    for pos in range(0, len(stats_list)):
+        print(f'{stats_list_name[pos]}: {stats_list[pos]}')
+    t.sleep(2)
+        
 
 def move():
     global x
@@ -59,13 +105,21 @@ def inventory():
             t.sleep(n)
 
 def repeated_action():
+    global choice
     print(f'You are currently at ({x}, {y}).')
+    t.sleep(n)
+    print(f'You have {Player.health} health and {Player.mana} mana.')
+    t.sleep(n)
+    if choice != "move":      # update for stopping farming of health and mana
+        pass
+    else:
+        hp_and_mana_update()
     if cells[f'({x}, {y})'] == "loot":          # checking for loot cells
         print("You landed on a loot cell!")
         t.sleep(n)
         loot_cell_intro(x, y, n)
         return 0
-    choice = input("What would you like to do? (move, interact, use, inventory, exit): ")
+    choice = input("What would you like to do? (move, interact, use, inventory, stats, exit): ")
     if choice == "exit":
         print("Thanks for playing!")
         t.sleep(1)
