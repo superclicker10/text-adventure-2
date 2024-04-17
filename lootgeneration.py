@@ -63,10 +63,26 @@ class Object:
 
 class hp_pot(Object):
     loot_chance = 10    #default 10
+    pitiful = 3
+    bad = 5
+    subpar = 7
+    normal = 10
+    good = 15
+    epic = 25
+    legendary = 40
+    perfect = 100
     cell_spawn = True
 
 class mn_pot(Object):
     loot_chance = 8    #default 8
+    pitiful = 2
+    bad = 4
+    subpar = 7
+    normal = 10
+    good = 15
+    epic = 20
+    legendary = 30
+    perfect = 50
     cell_spawn = True
 
 class gold(Object):
@@ -99,7 +115,7 @@ def book_rarity(n):
     num = r.randint(1, 1000)
     for chance in range(1, len(book_rarities)):
         #print(rarity_names[chance-1])
-        if num >= book_rarities[book_rarity_names[chance-1]] and num <= book_rarities[book_rarity_names[chance]]:
+        if num >= book_rarities[book_rarity_names[chance-1]] and num < book_rarities[book_rarity_names[chance]]:
             #print(f'Added a {rarity_names[chance]} {loot_names[item].lower()} to your inventory.')
             add_item(loot_names["book"], book_rarity_names[chance], book.amount, n)
             break
@@ -110,7 +126,7 @@ def pots_rarity(item, n):
     num = r.randint(1, 1000)
     for chance in range(1, len(rarities)):
         #print(rarity_names[chance-1])
-        if num >= rarities[rarity_names[chance-1]] and num <= rarities[rarity_names[chance]]:
+        if num >= rarities[rarity_names[chance-1]] and num < rarities[rarity_names[chance]]:
             #print(f'Added a {rarity_names[chance]} {loot_names[item].lower()} to your inventory.')
             add_item(loot_names[item], rarity_names[chance], Object.amount, n)
             break

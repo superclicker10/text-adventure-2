@@ -14,8 +14,9 @@ loot = ["health potion", "mana potion", "gold", "book", "scrap"]
 
 class Inventory:
     inventory = {}
-    size = 20               #adjust sizes in future updates.
-    item_max = 100
+    size = 30               #default 20 (adjust sizes in future updates.)
+    item_max = 100             #default 100
+    gold_max = 500
 
 no_rarity = ["gold", "scrap"]
 def add_item(item, rarity, amount, n):
@@ -26,9 +27,9 @@ def add_item(item, rarity, amount, n):
     item = item.lower()
     if item not in no_rarity:
         try:        # handles max item limit
-            if Inventory.inventory[f'{rarity} {item}'] >= 100:
+            if Inventory.inventory[f'{rarity} {item}'] >= Inventory.item_max:
                 print("You have reached the maximum possible amount of this item.")
-                Inventory.inventory[f'{item}'] = 100
+                Inventory.inventory[f'{rarity} {item}'] = Inventory.item_max
                 t.sleep(n)
                 return 0
             else:
@@ -46,9 +47,11 @@ def add_item(item, rarity, amount, n):
                 t.sleep(n)
     else:
         try:        # handles max item limit
-            if Inventory.inventory[f'{item}'] >= 100:
+            if item == "gold" and Inventory.inventory["gold"] >= Inventory.gold_max:
+                print("You have reached the maximum amount of this item.")
+            elif Inventory.inventory[f'{item}'] >= Inventory.item_max:
                 print("You have reached the maximum possible amount of this item.")
-                Inventory.inventory[f'{item}'] = 100
+                Inventory.inventory[f'{item}'] = Inventory.item_max
                 t.sleep(n)
                 return 0
             else:
@@ -118,6 +121,7 @@ def print_inventory():
     # i am not introducing sorting the inventory. ever. (okay maybe)
     if Inventory.inventory == {}:
         print("Your inventory is empty.")
+    Inventory.inventory = dict(sorted(Inventory.inventory.items(), key=lambda x:x[0]))
     for key in Inventory.inventory.keys():
         print(f'{key}: {Inventory.inventory[key]}')
     """

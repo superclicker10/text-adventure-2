@@ -40,6 +40,7 @@ def map_creation():
             elif oob_cell == False:
                 cells[f'({x_co}, {y_co})'] = Cell.id
             counter -= 1
+    cells[(0, 0)] = Cell.id
     return cells
 
 """  #preserving the pain i inflicted while making this whole conversion
