@@ -3,8 +3,9 @@ from move import *
 from lootgeneration import *
 from inventory import *
 from items import *
-from sound import *
+from sound import *     # sound and threading are music plugins
 from threading import Thread
+from multiprocessing import Process
 import time as t
 x = 0
 y = 0
@@ -148,9 +149,16 @@ if __name__ == "__main__":
     delay()
     print("\n", end="")
     generate_map()
-    thread = Thread(target=play_sound, daemon=True)
-    thread.start()
     while True:
+        try:
+            if music.is_alive():
+                pass
+            else:
+                music = Thread(target=play_sound, daemon=True)
+                music.start()
+        except Exception:
+            music = Thread(target=play_sound, daemon=True)
+            music.start()
         repeated_action()
         print("\n", end="")
 
