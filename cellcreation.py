@@ -6,7 +6,7 @@ class Cell:
     
     #temp = 20
     loot_max = 1        #default 1
-    loot_chance = 10        # default 10
+    loot_chance = 100        # default 10
     id = "normal"
 
 class Loot(Cell):

@@ -62,7 +62,7 @@ class Object:
     amount = 1 #placeholder for hp_pot and mn_pot functionality
 
 class hp_pot(Object):
-    loot_chance = 10    #default 10
+    loot_chance = 100    #default 10
     pitiful = 3
     bad = 5
     subpar = 7
@@ -70,7 +70,7 @@ class hp_pot(Object):
     good = 15
     epic = 25
     legendary = 40
-    perfect = 100
+    perfect = 75
     cell_spawn = True
 
 class mn_pot(Object):

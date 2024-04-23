@@ -3,6 +3,7 @@ from move import *
 from lootgeneration import *
 from inventory import *
 from items import *
+from forge import *
 import time as t
 x = 0
 y = 0
@@ -10,6 +11,7 @@ n = 1
 choice = None
 grid = Grid()
 inventory = Inventory()
+no_rarity_list = ["gold", "scrap"]
 
 class Player:       #making health and mana exist, as well as their stats.                          
     health = 100    #default 100
@@ -33,7 +35,28 @@ stats_list_name = ["health",
     "max mana",
     "mana regeneration"
 ]
-    
+
+rarity_names = ["minimum",
+    "pitiful",
+    "bad",
+    "subpar",
+    "normal",
+    "good",
+    "epic",
+    "legendary",
+    "perfect"]
+
+requirements = {
+    "minimum": 2,
+    "pitiful": 2,
+    "bad": 2,
+    "subpar": 2,
+    "normal": 2,
+    "good": 2,
+    "epic": 3,
+    "legendary": 5,
+    "perfect": 10
+}
     
 def delay():
     global n
@@ -78,7 +101,52 @@ def stats():
     for pos in range(0, len(stats_list)):
         print(f'{stats_list_name[pos]}: {stats_list[pos]}')
     t.sleep(2)
-        
+
+def forge():
+    item = input("What item do you want to merge? (only enter item name:) ").lower().strip()
+    if item in no_rarity_list:  
+        print("You can't merge that item.")
+        t.sleep(n)
+        return 0
+    if item == "book":
+        print("You can't merge books yet. (coming in a future update)")
+        return 0
+        """
+        rarity = input("What rarity do you want to merge? (blank, overrated, bad, normal, knowledgeable, intellectual, philosophical, wisdom): ").lower().strip()
+        if rarity not in book_rarity_names:
+            print("That isn't a valid rarity.")
+            t.sleep(n)
+            return 0
+        """
+    else:
+        rarity = input("What rarity do you want to merge? (pitiful, bad, subpar, normal, good, epic, legendary, perfect): ").lower().strip()
+        if rarity not in rarity_names:
+            print("That isn't a valid rarity.")
+            t.sleep(n)
+            return 0
+    if rarity not in rarity_names:  #add book merging for this
+        print("That isn't a valid rarity.")
+        t.sleep(n)
+        return 0
+    elif f'{rarity} {item}' not in Inventory.inventory:
+        print("You don't have that item.")
+        t.sleep(n)
+        return 0
+    if rarity == rarity_names[-1]:
+        print("This is the max rarity, you cannot merge further.")  #maybe add another rarity only through merging?
+        t.sleep(n)
+        return 0
+    try:
+        amount = int(input("Enter the amount of merged item to produce (see requirements.txt for the amount needed to merge to next rarity): "))
+    except:
+        print("That isn't a valid amount.")
+        t.sleep(n)
+        return 0
+    if amount <= 0:
+        print("That isn't a valid amount.")
+        t.sleep(n)
+        return 0
+    merge_items(item, rarity, amount, n)    
 
 def move():
     global x
@@ -110,7 +178,7 @@ def inventory():
     elif choice == "drop":
         item = rarity = None
         try:
-            amount = int(input("Enter the amount to drop: "))
+            amount = int(input("Enter the amount to drop: ")).lower().strip()
             drop_item(item, rarity, amount, n)
         except Exception or amount <= 0:
             print("You have not entered a valid amount.")
@@ -131,16 +199,16 @@ def repeated_action():
         t.sleep(n)
         loot_cell_intro(x, y, n)
         return 0
-    choice = input("What would you like to do? (move, interact, use, inventory, stats, exit): ").lower().strip()
+    choice = input("What would you like to do? (move, interact, use, forge, inventory, stats, exit): ").lower().strip()
     if choice == "exit":
         print("Thanks for playing!")
         t.sleep(1)
         exit()
-    try:
-        eval(f'{choice}()')
-    except:
-        print("You can't do that.")
-        t.sleep(n)
+    #try:
+    eval(f'{choice}()')
+    #except:
+        #print("You can't do that.")
+        #t.sleep(n)
 
 if __name__ == "__main__":
     delay()
