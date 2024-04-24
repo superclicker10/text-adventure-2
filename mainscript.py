@@ -4,6 +4,7 @@ from lootgeneration import *
 from inventory import *
 from items import *
 from forge import *
+from filegen import *
 import time as t
 x = 0
 y = 0
@@ -12,6 +13,7 @@ choice = None
 grid = Grid()
 inventory = Inventory()
 no_rarity_list = ["gold", "scrap"]
+loot = ["health potion", "mana potion", "gold", "book", "scrap"]
 
 class Player:       #making health and mana exist, as well as their stats.                          
     health = 100    #default 100
@@ -46,17 +48,29 @@ rarity_names = ["minimum",
     "legendary",
     "perfect"]
 
-requirements = {
-    "minimum": 2,
-    "pitiful": 2,
-    "bad": 2,
-    "subpar": 2,
-    "normal": 2,
-    "good": 2,
-    "epic": 3,
-    "legendary": 5,
-    "perfect": 10
-}
+requirements_file_write = [
+    "pitiful: 2 items",
+    "bad: 2 items",
+    "subpar: 2 items",
+    "normal: 2 items",
+    "good: 2 items",
+    "epic: 3 items",
+    "legendary: 5 items",
+    "perfect: 10 items",
+    "\n",
+    "Book rarities:",
+    "blank: 2 items",
+    "overrated: 2 items",   
+    "bad: 2 items",
+    "normal: 2 items",
+    "knowledgeable: 2 items",
+    "intellectual: 3 items",
+    "philosophical: 5 items",
+    "wisdom: 10 items"
+]
+
+
+
     
 def delay():
     global n
@@ -103,32 +117,28 @@ def stats():
     t.sleep(2)
 
 def forge():
+    if Forge.forge_unlocked == False:
+        print("You can't do that.")
+        t.sleep(n)
+        return 0
     item = input("What item do you want to merge? (only enter item name:) ").lower().strip()
-    if item in no_rarity_list:  
+    if item in no_rarity_list or item not in loot:  
         print("You can't merge that item.")
         t.sleep(n)
         return 0
     if item == "book":
-        print("You can't merge books yet. (coming in a future update)")
-        return 0
-        """
         rarity = input("What rarity do you want to merge? (blank, overrated, bad, normal, knowledgeable, intellectual, philosophical, wisdom): ").lower().strip()
         if rarity not in book_rarity_names:
             print("That isn't a valid rarity.")
             t.sleep(n)
             return 0
-        """
     else:
         rarity = input("What rarity do you want to merge? (pitiful, bad, subpar, normal, good, epic, legendary, perfect): ").lower().strip()
         if rarity not in rarity_names:
             print("That isn't a valid rarity.")
             t.sleep(n)
             return 0
-    if rarity not in rarity_names:  #add book merging for this
-        print("That isn't a valid rarity.")
-        t.sleep(n)
-        return 0
-    elif f'{rarity} {item}' not in Inventory.inventory:
+    if f'{rarity} {item}' not in Inventory.inventory:
         print("You don't have that item.")
         t.sleep(n)
         return 0
@@ -199,16 +209,31 @@ def repeated_action():
         t.sleep(n)
         loot_cell_intro(x, y, n)
         return 0
-    choice = input("What would you like to do? (move, interact, use, forge, inventory, stats, exit): ").lower().strip()
+    if cells[f'({x}, {y})'] == "forge":
+        if Forge.forge_unlocked == False:
+            print("You landed at the forge!")
+            t.sleep(n)
+            print("You can now use the forge anywhere to merge items.")
+            t.sleep(n)
+            make_reqs(requirements_file_write, n)
+            Forge.forge_unlocked = True
+            return 0
+        else:
+            choice = input("What would you like to do? (move, interact, use, forge, inventory, stats, exit): ").lower().strip()
+    elif Forge.forge_unlocked == True:
+        choice = input("What would you like to do? (move, interact, use, forge, inventory, stats, exit): ").lower().strip()
+    else:
+        choice = input("What would you like to do? (move, interact, use, inventory, stats, exit): ").lower().strip()
+        #print(cells[(1, 0)], x, y)
     if choice == "exit":
         print("Thanks for playing!")
         t.sleep(1)
         exit()
-    #try:
-    eval(f'{choice}()')
-    #except:
-        #print("You can't do that.")
-        #t.sleep(n)
+    try:
+        eval(f'{choice}()')
+    except:
+        print("You can't do that.")
+        t.sleep(n)
 
 if __name__ == "__main__":
     delay()

@@ -35,9 +35,10 @@ book_rarities = {
     "philosophical": 999,
     "wisdom": 1000
 }
+
 book_rarity_names = ["minimum",
     "blank",
-    "overrated",
+    "overrated",    #make overrated books have higher sell values.
     "bad",
     "normal",
     "knowledgeable",
@@ -62,7 +63,7 @@ class Object:
     amount = 1 #placeholder for hp_pot and mn_pot functionality
 
 class hp_pot(Object):
-    loot_chance = 100    #default 10
+    loot_chance = 10    #default 10
     pitiful = 3
     bad = 5
     subpar = 7

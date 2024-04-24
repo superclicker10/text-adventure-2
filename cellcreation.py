@@ -6,7 +6,7 @@ class Cell:
     
     #temp = 20
     loot_max = 1        #default 1
-    loot_chance = 100        # default 10
+    loot_chance = 10        # default 10
     id = "normal"
 
 class Loot(Cell):
@@ -19,6 +19,12 @@ class OOB(Cell):
     
     oob = True
     id = "oob"
+    
+class Forge(Cell):
+    
+    id = "forge"
+    forge_unlocked = False
+    
     
 cells = {}
 def map_creation():
@@ -40,6 +46,8 @@ def map_creation():
             elif oob_cell == False:
                 cells[f'({x_co}, {y_co})'] = Cell.id
             counter -= 1
+    cells[f'{r.randint(-10, 10)}, {r.randint(-10, 10)}'] = Forge.id   #add later
+    #cells[f'({1}, {0})'] = Forge.id
     cells[(0, 0)] = Cell.id
     return cells
 
