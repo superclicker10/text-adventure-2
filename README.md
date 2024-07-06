@@ -8,3 +8,5 @@ Install pyaudio by putting "py -m pip install pyaudio" into your command prompt.
 Everything should work!
 
 If you don't want the music version, look for releases titled "(version name)".
+
+Run mainscript.py to start the game.
