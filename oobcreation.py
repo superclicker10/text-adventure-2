@@ -23,10 +23,10 @@ def oob_creation():
     return oob
 """
 def oob_creation_walls(): 
-    oob_walls = [f'({x}, 151)' for x in range(-50, 51)]   #adjust values for max y coords+1, max y coords, max y coords+1
-    oob_walls.extend(f'({x}, -151)' for x in range(-50, 51))
-    oob_walls.extend(f'(-151, {y})' for y in range(-50, 51))   #adjust values for max x coords+1, max x coords, max x coords+1
-    oob_walls.extend(f'(151, {y})' for y in range(-50, 51))
+    oob_walls = [f'({x}, 151)' for x in range(-150, 151)]   #adjust values for max y coords+1, max y coords, max y coords+1
+    oob_walls.extend(f'({x}, -151)' for x in range(-150, 151))
+    oob_walls.extend(f'(-151, {y})' for y in range(-150, 151))   #adjust values for max x coords+1, max x coords, max x coords+1
+    oob_walls.extend(f'(151, {y})' for y in range(-150, 151))
     return oob_walls
     
 #print(oob_creation_walls())

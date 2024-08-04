@@ -35,9 +35,10 @@ book_rarities = {
     "philosophical": 999,
     "wisdom": 1000
 }
+
 book_rarity_names = ["minimum",
     "blank",
-    "overrated",
+    "overrated",    #make overrated books have higher sell values.
     "bad",
     "normal",
     "knowledgeable",
@@ -70,7 +71,7 @@ class hp_pot(Object):
     good = 15
     epic = 25
     legendary = 40
-    perfect = 100
+    perfect = 75
     cell_spawn = True
 
 class mn_pot(Object):
@@ -101,23 +102,48 @@ class scrap(Object):
     min_amt = 1             # default 1
     max_amt = 3             # default 3
     cell_spawn = True
+    
+class atk_def_misc(Object):
+    tiny = 0.1
+    smaller = 0.25
+    small = 0.4
+    normal = 0.5
+    large = 0.7
+    larger = 0.85
+    huge = 1
+    huger = 1.15
+    enormous = 1.3
+    enormouser = 1.5
+    gigantic = 2.5
+
+class attack(atk_def_misc, Object):
+    pass
+
+class defence(atk_def_misc, Object):
+    pass
+
+class max_health(atk_def_misc, Object):
+    pass
+
+class max_mana(atk_def_misc, Object):
+    pass
 
 loot = [hp_pot, mn_pot, gold, book, scrap]
 no_rarity_items = list(["gold", "scrap"])
 
 def no_rarity(item, n):
-    num_add = r.randint(item.min_amt, item.max_amt)
+    num_add = r.randint(item.min_amt, item.max_amt) #generates how much of the item should be added
     print(f'You got {num_add} {item.__name__}!')
     t.sleep(n)
     add_item(loot_names[f'{item.__name__}'], None, num_add, n)
 
 def book_rarity(n):
-    num = r.randint(1, 1000)
+    num = r.randint(1, 1000)    #number for chance
     for chance in range(1, len(book_rarities)):
         #print(rarity_names[chance-1])
         if num >= book_rarities[book_rarity_names[chance-1]] and num < book_rarities[book_rarity_names[chance]]:
             #print(f'Added a {rarity_names[chance]} {loot_names[item].lower()} to your inventory.')
-            add_item(loot_names["book"], book_rarity_names[chance], book.amount, n)
+            add_item(loot_names["book"], book_rarity_names[chance], book.amount, n) #adds the amount needed
             break
         else:
             continue
@@ -145,26 +171,26 @@ def loot_cell_intro(x, y, n):
             #print(int(f'{item}'__dict__.values()))
             #print(hp_pot.loot_chance)
             chance = r.randint(1, 100)
-            lootchance = item.loot_chance
+            lootchance = item.loot_chance   #generates loot chance based on what item it is looking at
             amount = item.amount
             #print(chance)
             #print(item.__name__, str(lootchance), chance)
             #if r.randint(1, 100) <= item.__name__.loot_chance:
             if chance <= lootchance:
                 rarity_gen_item = item.__name__
-                if rarity_gen_item in no_rarity_items:
+                if rarity_gen_item in no_rarity_items:  #stops generating a rarity if it unnecessary
                     pass
                 else:
                     print(f'You got {amount} {loot_names[item.__name__].lower()}!')
                 t.sleep(n)
-                cells[f'({x}, {y})'] = "normal"
+                cells[f'({x}, {y})'] = "normal" #makes it so loot can only be got once per unique tile
                 item_generated = True
                 break
             else:
                 continue
     if rarity_gen_item == "hp_pot" or rarity_gen_item == "mn_pot":
         eval(f'pots_rarity(rarity_gen_item, n)')
-    elif rarity_gen_item in no_rarity_items:
+    elif rarity_gen_item in no_rarity_items:    #evaluates function based on what item has been generated
         eval(f'no_rarity(item, n)')
     else:
         eval(f'{rarity_gen_item}_rarity(n)')

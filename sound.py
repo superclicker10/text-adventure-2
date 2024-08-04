@@ -43,8 +43,8 @@ def play_sound():
         print(f'Plays a wave file. Usage: {sys.argv[0]} chopin10_4.wav')
         sys.exit(-1)
     """
-    #file = s.choice(all)
-    file = "saul"
+    file = s.choice(all)
+    #file = "saul"
     with wave.open(f"sound/{file}.wav", 'rb') as wf:
         # Instantiate PyAudio and initialize PortAudio system resources (1)
         p = pyaudio.PyAudio()
