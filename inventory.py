@@ -11,10 +11,16 @@ rarity_names = ["minimum",
     "legendary",
     "perfect"]
 loot = ["health potion", "mana potion", "gold", "book", "scrap"]
+stat_items = [
+    "max health",
+    "max mana",
+    "attack",
+    "defence"
+]
 
 class Inventory:
     inventory = {}
-    size = 30               #default 20 (adjust sizes in future updates.)
+    size = 20               #default 20 (adjust sizes in future updates.)
     item_max = 100             #default 100
     gold_max = 500
 
@@ -25,7 +31,13 @@ def add_item(item, rarity, amount, n):
     except Exception:
         pass
     item = item.lower()
-    if item not in no_rarity:
+    if item in stat_items:
+        try:
+            Inventory.inventory[f'{rarity} {item}'] += 1
+        except:
+            Inventory.inventory[f'{rarity} {item}'] = 1
+        return 0
+    elif item not in no_rarity:
         try:        # handles max item limit
             if Inventory.inventory[f'{rarity} {item}'] >= Inventory.item_max:
                 print("You have reached the maximum possible amount of this item.")
@@ -34,7 +46,11 @@ def add_item(item, rarity, amount, n):
                 return 0
             else:
                 Inventory.inventory[f'{rarity} {item}'] += amount
-                print(f'Added {amount} {rarity} {item} to your inventory.')
+                if Inventory.inventory[f'{rarity} {item}'] >= Inventory.item_max:
+                    print(f'Added {amount} {item} to your inventory (reached max of {Inventory.item_max})')
+                    Inventory.inventory[f'{rarity} {item}'] = Inventory.item_max
+                else:
+                    print(f'Added {amount} {rarity} {item} to your inventory.')
                 t.sleep(n)
         except Exception:   # handles max inventory size, exception is for the item not existing
             if len(Inventory.inventory) > Inventory.size:
@@ -49,14 +65,25 @@ def add_item(item, rarity, amount, n):
         try:        # handles max item limit
             if item == "gold" and Inventory.inventory["gold"] >= Inventory.gold_max:
                 print("You have reached the maximum amount of this item.")
+                t.sleep(n)
+                return 0
             elif Inventory.inventory[f'{item}'] >= Inventory.item_max:
+                if item == "gold":  #handles gold case which is already handled, but gold is part of being an item
+                    Inventory.inventory[f'{item}'] += amount
+                    print(f'Added {amount} {item} to your inventory.')
+                    t.sleep(n)
+                    return 0
                 print("You have reached the maximum possible amount of this item.")
                 Inventory.inventory[f'{item}'] = Inventory.item_max
                 t.sleep(n)
                 return 0
             else:
                 Inventory.inventory[f'{item}'] += amount
-                print(f'Added {amount} {item} to your inventory.')
+                if Inventory.inventory[f'{item}'] >= Inventory.item_max:
+                    print(f'Added {amount} {item} to your inventory (reached max of {Inventory.item_max})')
+                    Inventory.inventory[f'{item}'] = Inventory.item_max
+                else:
+                    print(f'Added {amount} {item} to your inventory.')
                 t.sleep(n)
         except Exception:   # handles max inventory size, exception is for the item not existing
             if len(Inventory.inventory) > Inventory.size:
@@ -115,6 +142,15 @@ def drop_item(item, rarity, amount, n):
         except Exception:
             print("You do not have that item.")
             t.sleep(n)
+            
+def buy_item(amount):
+    Inventory.inventory["gold"] -= amount
+    
+def remove_item(rarity, item):
+    #print("you here")
+    Inventory.inventory[f'{rarity} {item}'] -= 1
+    if Inventory.inventory[f'{rarity} {item}'] <= 0:
+        del Inventory.inventory[f'{rarity} {item}']
 
 def print_inventory():
     #Inventory.inventory = dict(sorted(Inventory.inventory, key=o.itemgetter(0)))

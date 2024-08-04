@@ -46,7 +46,7 @@ requirements = {
 
 def merge_items(item, rarity, amount, n):
     if item == "book":
-        for temp in range(0, len(book_rarity_names)):
+        for temp in range(0, len(book_rarity_names)):   # finding the rarity in the list of rarities
             if book_rarity_names[temp] == rarity:
                 pos = temp
                 break
@@ -55,10 +55,10 @@ def merge_items(item, rarity, amount, n):
             if rarity_names[temp] == rarity:
                 pos = temp
                 break
-    if item == "book":
+    if item == "book":      #finding the rarity to merge
         rarity_to_merge = book_rarity_names[pos+1]
-        temp1 = Inventory.inventory[f'{rarity} {item}']
-        temp2 = amount*book_requirements[rarity_to_merge]
+        temp1 = Inventory.inventory[f'{rarity} {item}'] #looking at how much of an item you have
+        temp2 = amount*book_requirements[rarity_to_merge]   #finds the amount needed to successfully merge
     else:
         rarity_to_merge = rarity_names[pos+1]
         temp1 = Inventory.inventory[f'{rarity} {item}']
@@ -69,15 +69,15 @@ def merge_items(item, rarity, amount, n):
         return 0
     
     if item == "book":
-        Inventory.inventory[f'{rarity} {item}'] -= amount*book_requirements[rarity_to_merge]  
+        Inventory.inventory[f'{rarity} {item}'] -= amount*book_requirements[rarity_to_merge]   #takes out the items from your inventory
     else:          
         Inventory.inventory[f'{rarity} {item}'] -= amount*requirements[rarity_to_merge]
     if Inventory.inventory[f'{rarity} {item}'] <= 0:
         Inventory.inventory.pop(f'{rarity} {item}')
     if item == "book":
         print(f'Merged into {amount} {book_rarity_names[pos+1]} {item}!')
-        t.sleep(n)
-        add_item(item, book_rarity_names[pos+1], amount, n)
+        t.sleep(n)  
+        add_item(item, book_rarity_names[pos+1], amount, n) #adds the merged items.
     else:
         print(f'Merged into {amount} {rarity_names[pos+1]} {item}!')
         t.sleep(n)
