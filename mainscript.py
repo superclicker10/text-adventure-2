@@ -6,6 +6,7 @@ from inventory import *
 from items import *
 from forge import *
 from filegen import *
+from saving import *
 import time as t
 
 x = 0
@@ -245,17 +246,18 @@ def stat_items_process(): #processes stat items from market
             stat_name = " ".join(parts[1:])
             
             normalized_stat_name = normalize_stat_name(stat_name)
-            
             if normalized_stat_name in stat_items:
                 increase = getattr(atk_def_misc, rarity)
                 amount = getattr(player, normalized_stat_name)
                 setattr(player, normalized_stat_name, amount + increase)
+                #print(getattr(player, normalized_stat_name))
                 #print(f"Updated stat: {normalized_stat_name} to {getattr(player, normalized_stat_name)}")
         except Exception as e:
             #print("Error processing item:", item, e)
             continue
     try:
-        if item in stat_items:
+    #print(item)
+        if normalized_stat_name in stat_items:
             remove_item(rarity, stat_name)
     except Exception as e:
         #print("Error removing item:", e)
@@ -275,6 +277,7 @@ def move():
         try:
             x = eval(f'grid.{direction}(grid.oob_walls, temp_x, temp_y, n)')[0]     #update parameters should functions change
         except:
+            #print("here")
             return x, y
         if f'grid.{direction}(grid.oob_walls, temp_x, temp_y, n)' == False:
             return x, y
@@ -284,6 +287,7 @@ def move():
         print("You have entered an invalid movement direction.")
     if move_success == True:
         global_market_buffer = False
+    #print(x, y)
     return x, y
 
 def use():
@@ -320,6 +324,7 @@ def repeated_action():
     stat_items_process()
     #print(stats_list)
     item_grabbed = False
+    #print(cells_visited)
     if cells_visited[f'({x}, {y})'] == True:
         print(f'You are currently at ({x}, {y}) (already visited).')
     else:
@@ -352,16 +357,23 @@ def repeated_action():
             Forge.forge_unlocked = True
             return 0
         else:
-            choice = input("What would you like to do? (move, interact, use, forge, inventory, stats, exit): ").lower().strip()
+            choice = input("What would you like to do? (move, interact, use, forge, inventory, stats, save, exit): ").lower().strip()
     elif Forge.forge_unlocked == True:
-        choice = input("What would you like to do? (move, interact, use, forge, inventory, stats, exit): ").lower().strip()
+        choice = input("What would you like to do? (move, interact, use, forge, inventory, stats, save, exit): ").lower().strip()
     else:
-        choice = input("What would you like to do? (move, interact, use, inventory, stats, exit): ").lower().strip()
+        choice = input("What would you like to do? (move, interact, use, inventory, stats, save, exit): ").lower().strip()
         #print(cells[(1, 0)], x, y)
     if choice == "exit":
         print("Thanks for playing!")
-        t.sleep(1)
+        t.sleep(2)
         exit()
+    if choice == "save":
+        print("Saving...")
+        t1 = t.time()
+        save(stats_list, x, y)
+        t2 = t.time()
+        print(f"Saving took {round(t2-t1, 2)} seconds")
+        return 0
     try:
         eval(f'{choice}()')
     except:
@@ -371,11 +383,46 @@ def repeated_action():
 if __name__ == "__main__":
     delay()
     print("\n", end="")
-    t1 = t.time()
-    generate_map()
-    visited_creation()
-    t2 = t.time()
-    print(f'Loading took {m.floor(t2-t1)} seconds')
+    while True:
+        load_game = input("Load game or new game? (load, new): ").lower().strip()
+        if load_game == "load":
+            if load(player, x, y) == 0:
+                print("No save file found. Starting new game...")   
+                t.sleep(n)      
+                t1 = t.time()   #redoing new game cuz theres no easy way to go back to the other option
+                generate_map()
+                visited_creation()
+                t2 = t.time()
+                print(f'Loading took {m.floor(t2-t1)} seconds')
+                break
+            content = load(player, x, y)
+            #print(content[3], content[4])
+            cells = content[0]
+            for line in cells.keys():
+                line = line.rstrip("\n")
+            cells_visited = content[1]
+            for line in cells_visited.keys():
+                line = line.rstrip("\n")
+            #print(cells)
+            Inventory.inventory = content[2]
+            for line in Inventory.inventory.keys():
+                line = line.rstrip("\n")
+            stats_list = content[3]
+            x = content[4]
+            y = content[5]
+            print("Game loaded!")
+            t.sleep(n)
+            break
+        elif load_game == "new":
+            t1 = t.time()
+            generate_map()
+            visited_creation()
+            t2 = t.time()
+            print(f'Loading took {m.floor(t2-t1)} seconds')
+            break
+        else:
+            print("That isn't a valid option.")    
+            t.sleep(n)
     t.sleep(n)
     print("")
     while True:

@@ -19,7 +19,9 @@ stat_items = [
 ]
 
 class Inventory:
-    inventory = {}
+    inventory = {
+        "gold": 100
+    }
     size = 20               #default 20 (adjust sizes in future updates.)
     item_max = 100             #default 100
     gold_max = 500

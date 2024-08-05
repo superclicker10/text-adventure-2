@@ -62,9 +62,9 @@ def map_creation():
             counter -= 1
             #print(counter)
     #print("Cells done")
-    cells[f'{r.randint(-10, 10)}, {r.randint(-10, 10)}'] = Forge.id   #generates guaranteed market and forge
+    cells[f'({r.randint(-10, 10)}, {r.randint(-10, 10)})'] = Forge.id   #generates guaranteed market and forge
     #print("Forge done")
-    cells[f'{r.randint(-10, 10)}, {r.randint(-10, 10)}'] = Market.id
+    cells[f'({r.randint(-10, 10)}, {r.randint(-10, 10)})'] = Market.id
     while temp_counter <= Market.market_amt:
         x_co = r.randint(-140, 140)
         y_co = r.randint(-140, 140)
